@@ -21,16 +21,44 @@
     <ClCompile Include="C:\Users\Justin\Downloads\glad\src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="knob.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="vertex.vert">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="frag.frag">
-      <Filter>Source Files</Filter>
-    </Text>
     <Text Include="uniform.frag">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="position.vert">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="passthrough.frag">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="color.vert">
+      <Filter>Source Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Knob.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="container.jpg">
+      <Filter>Source Files</Filter>
+    </Image>
+    <Image Include="awesomeface.png">
+      <Filter>Source Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

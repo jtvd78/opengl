@@ -119,11 +119,23 @@
   <ItemGroup>
     <ClCompile Include="C:\Users\Justin\Downloads\glad\src\glad.c" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="knob.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="frag.frag" />
+    <Text Include="passthrough.frag" />
+    <Text Include="color.vert" />
     <Text Include="uniform.frag" />
-    <Text Include="vertex.vert" />
+    <Text Include="position.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Knob.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="awesomeface.png" />
+    <Image Include="container.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
