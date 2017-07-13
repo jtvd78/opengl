@@ -15,24 +15,36 @@ class Shader {
 public:
 	unsigned int ID;
 
-	Shader(std::string vertex, std::string fragment) {
+	Shader(std::string vertex, std::string fragment, std::string geometryPath = "") {
 
 		std::string vertexCode;
 		std::string fragmentCode;
+		std::string geometryCode;
 
 		try {
 			vertexCode = read_shader(vertex);
 			fragmentCode = read_shader(fragment);
+
+			if (geometryPath != "") {
+				geometryCode = read_shader(geometryPath);
+			}
+
 		} catch (std::ifstream::failure e) {
 			throw e;
 		}
 
 		int vertexShader;
 		int fragmentShader;
+		int geometryShader;
 
 		try {
 			vertexShader = compile_shader(vertexCode, GL_VERTEX_SHADER);
 			fragmentShader = compile_shader(fragmentCode, GL_FRAGMENT_SHADER);
+
+			unsigned int geometry;
+			if (geometryPath != "") {
+				geometryShader = compile_shader(geometryCode, GL_GEOMETRY_SHADER);
+			}
 		} catch (std::runtime_error e) {
 			throw e;
 		}
@@ -40,6 +52,11 @@ public:
 		ID = glCreateProgram();
 		glAttachShader(ID, vertexShader);
 		glAttachShader(ID, fragmentShader);
+
+		if (geometryPath != "") {
+			glAttachShader(ID, geometryShader);
+		}
+
 		glLinkProgram(ID);
 
 		try {

@@ -57,20 +57,23 @@ glm::vec3 create_mouse_ray_1(float mouseX, float mouseY) {
 	glm::mat4 proj = get_projection_matrix();
 	glm::mat4 view = camera.GetViewMatrix();
 
-	glm::vec4 screenPos(x_norm, -y_norm, 0.0f, 1.0f);
+	glm::vec4 screenPos = glm::vec4(x_norm, -y_norm, 0.0f, 1.0f);
 	glm::vec4 worldPos = glm::inverse(proj * view) * screenPos;
 
 	return glm::vec3(worldPos);
 }
 
 glm::vec3 create_mouse_ray_2(float mouseX, float mouseY) {
+	float x = (2.0f * mouseX) / SCR_WIDTH - 1.0f;
+	float y = 1.0f - (2.0f * mouseY) / SCR_HEIGHT;
+	float z = 0.0f;
+
+	glm::vec3 screenPos(mouseX, SCR_HEIGHT-mouseY, z);
 
 	glm::mat4 proj = get_projection_matrix();
 	glm::mat4 view = camera.GetViewMatrix();
 
-	glm::vec3 screenPos(mouseX, SCR_HEIGHT - mouseY, 0.0f);
 	glm::vec3 ray_wor = glm::unProject(screenPos, view, proj, glm::vec4(0.0f, 0.0f, SCR_WIDTH, SCR_HEIGHT));
-	
 	ray_wor.x = -ray_wor.x;
 	ray_wor.z = -ray_wor.z;
 	return ray_wor;

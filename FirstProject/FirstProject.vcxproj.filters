@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Object">
+      <UniqueIdentifier>{0eac37a8-5829-44d5-91be-ad3e4108f157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mesh">
+      <UniqueIdentifier>{b466bbee-6a66-47b8-8a50-608eb18eaf24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mesh_Impl">
+      <UniqueIdentifier>{1be0ceab-c8b8-48cd-83a8-b3e6d23ba08c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -21,23 +30,24 @@
     <ClCompile Include="C:\Users\Justin\Downloads\glad\src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="knob.cpp">
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelObject.cpp">
+      <Filter>Source Files\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeMesh.cpp">
+      <Filter>Source Files\Mesh_Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="FloorMesh.cpp">
+      <Filter>Source Files\Mesh_Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="KnobMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="uniform.frag">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="position.vert">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="passthrough.frag">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="color.vert">
-      <Filter>Source Files</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -46,19 +56,60 @@
     <ClInclude Include="stb_image.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Knob.h">
+    <ClInclude Include="Camera.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="Model.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Source Files\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelObject.h">
+      <Filter>Source Files\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Source Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeMesh.h">
+      <Filter>Source Files\Mesh_Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="FloorMesh.h">
+      <Filter>Source Files\Mesh_Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="KnobMesh.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="container.jpg">
+    <Image Include="wood.png">
       <Filter>Source Files</Filter>
     </Image>
     <Image Include="awesomeface.png">
       <Filter>Source Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lighting.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="lighting.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="normal.vs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="normal.fs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="normal.gs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="2.2.lamp.fs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="2.2.lamp.vs">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -118,24 +118,38 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="C:\Users\Justin\Downloads\glad\src\glad.c" />
+    <ClCompile Include="CubeMesh.cpp" />
+    <ClCompile Include="FloorMesh.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelObject.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="knob.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="passthrough.frag" />
-    <Text Include="color.vert" />
-    <Text Include="uniform.frag" />
-    <Text Include="position.vert" />
+    <ClCompile Include="KnobMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Knob.h" />
+    <ClInclude Include="CubeMesh.h" />
+    <ClInclude Include="FloorMesh.h" />
+    <ClInclude Include="ModelObject.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="KnobMesh.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="awesomeface.png" />
-    <Image Include="container.jpg" />
+    <Image Include="wood.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="2.2.lamp.vs" />
+    <None Include="2.2.lamp.fs" />
+    <None Include="lighting.frag" />
+    <None Include="lighting.vert" />
+    <None Include="normal.fs" />
+    <None Include="normal.gs" />
+    <None Include="normal.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
