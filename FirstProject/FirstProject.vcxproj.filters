@@ -22,12 +22,12 @@
     <Filter Include="Source Files\Mesh_Impl">
       <UniqueIdentifier>{1be0ceab-c8b8-48cd-83a8-b3e6d23ba08c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Model">
+      <UniqueIdentifier>{2bf88a54-e977-430a-8458-7b38b64234f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Users\Justin\Downloads\glad\src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
@@ -36,17 +36,32 @@
     <ClCompile Include="ModelObject.cpp">
       <Filter>Source Files\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Source Files\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="CubeMesh.cpp">
       <Filter>Source Files\Mesh_Impl</Filter>
     </ClCompile>
     <ClCompile Include="FloorMesh.cpp">
       <Filter>Source Files\Mesh_Impl</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="RectMesh.cpp">
+      <Filter>Source Files\Mesh_Impl</Filter>
+    </ClCompile>
     <ClCompile Include="KnobMesh.cpp">
+      <Filter>Source Files\Mesh_Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="Ray.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RayMesh.cpp">
+      <Filter>Source Files\Mesh_Impl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,9 +72,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
@@ -77,8 +89,23 @@
     <ClInclude Include="FloorMesh.h">
       <Filter>Source Files\Mesh_Impl</Filter>
     </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Source Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="RectMesh.h">
+      <Filter>Source Files\Mesh_Impl</Filter>
+    </ClInclude>
     <ClInclude Include="KnobMesh.h">
+      <Filter>Source Files\Mesh_Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glad.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RayMesh.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

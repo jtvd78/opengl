@@ -5,9 +5,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/vector_angle.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "stb_image.h"
 
 
 #include "Shader.h"
@@ -21,6 +22,7 @@
 #include "CubeMesh.h"
 #include "KnobMesh.h"
 #include "FloorMesh.h"
+#include "RayMesh.h"
 
 
 unsigned int load_texture(std::string path);
@@ -33,50 +35,28 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 glm::vec3 pointer_pos(0.0f, 0.0f, 0.0f);
 
 //Screen size settings
-int SCR_HEIGHT = 600;
-int SCR_WIDTH = 800;
+int screen_height = 600;
+int screen_width = 800;
 
 
 Camera camera(glm::vec3(0.0f, 20.0f, 0.0f));
-float lastX = SCR_WIDTH / 2;
-float lastY = SCR_HEIGHT / 2;
+float lastX = screen_width / 2;
+float lastY = screen_height / 2;
 bool firstMouse = true;
 
 bool free_mouse = false;
 
+ModelObject* test_object_1 = NULL;
+ModelObject* test_object_2 = NULL;
+ModelObject* test_object_3 = NULL;
+ModelObject* test_object_4 = NULL;
+ModelObject* test_object_5 = NULL;
+
+glm::vec3 test_position;
+
 glm::mat4 get_projection_matrix() {
-	return glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+	return glm::perspective(glm::radians(camera.Zoom), (float)screen_width / (float)screen_height, 0.1f, 100.0f);
 }
-
-
-
-glm::vec3 create_mouse_ray_1(float mouseX, float mouseY) {
-	float x_norm = mouseX / SCR_WIDTH * 2.0f - 1.0f;
-	float y_norm = mouseY / SCR_HEIGHT * 2.0f - 1.0f;
-
-	glm::mat4 proj = get_projection_matrix();
-	glm::mat4 view = camera.GetViewMatrix();
-
-	glm::vec4 screenPos(x_norm, -y_norm, 0.0f, 1.0f);
-	glm::vec4 worldPos = glm::inverse(proj * view) * screenPos;
-
-	return glm::vec3(worldPos);
-}
-
-glm::vec3 create_mouse_ray_2(float mouseX, float mouseY) {
-
-	glm::mat4 proj = get_projection_matrix();
-	glm::mat4 view = camera.GetViewMatrix();
-
-	glm::vec3 screenPos(mouseX, SCR_HEIGHT - mouseY, 0.0f);
-	glm::vec3 ray_wor = glm::unProject(screenPos, view, proj, glm::vec4(0.0f, 0.0f, SCR_WIDTH, SCR_HEIGHT));
-	
-	ray_wor.x = -ray_wor.x;
-	ray_wor.z = -ray_wor.z;
-	return ray_wor;
-}
-
-
 
 int main() {
 
@@ -87,7 +67,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // Mac OSx
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "First Project", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "First Project", NULL, NULL);
 	if (window == NULL) {
 		std::cout << "Failed to create window" << std::endl;
 		glfwTerminate();
@@ -110,7 +90,7 @@ int main() {
 		return -1;
 	}
 
-	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); //TODO: Not needed?
+	glViewport(0, 0, screen_width, screen_height); //TODO: Not needed?
 
 	//Wireframe
 //	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -123,37 +103,46 @@ int main() {
 	Shader lampShader("2.2.lamp.vs", "2.2.lamp.fs");
 
 	stbi_set_flip_vertically_on_load(true);
-
 	unsigned int wood_texture_id = load_texture("wood.png");
 	unsigned int face_texture_id = load_texture("awesomeface.png");
 	unsigned int knob_texture_id = load_texture("knob_2.png");
+	unsigned int ground_texture_id = load_texture("ground_2.jpg");
 
 	Texture wood_texture = Texture{ wood_texture_id, "texture_diffuse" };
 	Texture face_texture = Texture{ face_texture_id, "texture_diffuse" };
 	Texture knob_texture = Texture{ knob_texture_id, "texture_diffuse" };
+	Texture ground_texture = Texture{ ground_texture_id, "texture_diffuse" };
 
 	shader.use();
 	shader.setInt("texture_diffuse1", 0);
 
-	// shader configuration
-	// --------------------
-//	shader.use();
-//	shader.setInt("texture1", 0);
-
-
-	CubeMesh cube_mesh = CubeMesh(wood_texture);
-	FloorMesh floor_mesh = FloorMesh(wood_texture);
+	CubeMesh cube_mesh = CubeMesh(face_texture);
+	FloorMesh floor_mesh = FloorMesh(ground_texture);
 	KnobMesh knob_mesh = KnobMesh(12, 30, knob_texture);
+	RayMesh ray_mesh(ground_texture);
 
 	Model floor_model = Model(floor_mesh);
 	Model cube_model = Model(cube_mesh);
 	Model knob_model = Model(knob_mesh);
+	Model ray_model(ray_mesh);
 
-	ModelObject cube_object = ModelObject(cube_model);
-	ModelObject lamp_object = ModelObject(cube_model, glm::vec3(0.0f), glm::vec3(0.0f), 0.2f);
-	ModelObject floor_object = ModelObject(floor_model, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
-	ModelObject knob_object_1 = ModelObject(knob_model, glm::vec3(3.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
-	ModelObject knob_object_2 = ModelObject(knob_model, glm::vec3(5.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+	ModelObject cube_object(cube_model);
+	ModelObject lamp_object(cube_model, glm::vec3(0.0f), glm::vec3(0.0f), 0.2f);
+	ModelObject floor_object(floor_model, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+	ModelObject knob_object_1(knob_model, glm::vec3(5.0f, 1.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+	ModelObject knob_object_2(knob_model, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+
+	ModelObject ray_object(ray_model, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+
+	ModelObject cube_object_2(cube_model);
+	ModelObject cube_object_3(cube_model, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.2f);
+
+
+	test_object_2 = &knob_object_2;
+	test_object_1 = &knob_object_1;
+	test_object_3 = &cube_object_2;
+	test_object_4 = &cube_object_3;
+	test_object_5 = &ray_object;
 
 	int numFrames = 0;
 
@@ -170,7 +159,7 @@ int main() {
 		numFrames++;
 		if (time_ctr >= 1.0) { // If last prinf() was more than 1 sec ago
 											 // printf and reset timer
-			printf("%f ms/frame, %d frames\n", 1000.0 *  time_ctr /  float(numFrames), numFrames);
+			printf("%f ms/frame, %d frames\n", 1000.0 *  time_ctr / float(numFrames), numFrames);
 			numFrames = 0;
 			time_ctr = 0;
 		}
@@ -178,7 +167,7 @@ int main() {
 
 		// lighting info
 		// -------------
-		glm::vec3 lightPos(1.0f, 20.0f * cosf(7.0f / 3.0f * (float)glfwGetTime()) + 20.5f, 1.0f);
+		glm::vec3 lightPos(0.0f, 5.0f * cosf(7.0f / 3.0f * (float)glfwGetTime()) + 10.5f, 0.0f);
 		lamp_object.set_position(lightPos);
 
 		process_input(window, deltaTime);
@@ -200,18 +189,44 @@ int main() {
 		cube_object.rotate(glm::vec3(0.0f, glm::radians(0.01), 0.0f));
 		cube_object.set_position(pointer_pos);
 		lamp_object.rotate(glm::vec3(0.0f, glm::radians(0.1), 0.0f));
+		knob_object_1.rotate(glm::vec3(0.0f, glm::radians(0.005), 0.0f));
+
+
+
+
+		glm::mat4 rot;
+		rot = glm::translate(rot, knob_object_1.get_position());
+		rot = glm::rotate(rot, knob_object_1.get_angle().x, glm::vec3(1.0f, 0.0f, 0.0f));
+		rot = glm::rotate(rot, knob_object_1.get_angle().y, glm::vec3(0.0f, 1.0f, 0.0f));
+		rot = glm::rotate(rot, knob_object_1.get_angle().z, glm::vec3(0.0f, 0.0f, 1.0f));
+		test_position = rot * glm::vec4(camera.Position - knob_object_1.get_position(), 1.0f);
+		test_object_3->set_position(test_position);
+
+		ray_object.set_position(test_position);
+
+
+
 
 		// Draw objects
-		floor_object.draw(shader);
-		cube_object.draw(shader);
+	//	floor_object.draw(shader);
+	//	cube_object.draw(shader);
 		knob_object_1.draw(shader);
-		knob_object_2.draw(shader);
+		//		knob_object_2.draw(shader);
+
+		test_object_3->draw(shader);
+		test_object_4->draw(shader);
+
+		ray_object.draw(shader);
+
+
 
 		// Lamp
 		lampShader.use();
 		lampShader.setMat4("projection", projection);
 		lampShader.setMat4("view", view);
 		lamp_object.draw(lampShader);
+
+
 
 		// Normals
 //		normalShader.use();
@@ -259,8 +274,6 @@ void process_input(GLFWwindow *window, float deltaTime) {
 	} else if (tab_state == GLFW_RELEASE) {
 		tab_pressed = false;
 	}
-
-
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
@@ -271,34 +284,73 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 
 
-	if (free_mouse) {	
+	if (free_mouse) {
 
-		glm::vec3 dir1 = create_mouse_ray_1(xpos, ypos);
-		glm::vec3 dir2 = create_mouse_ray_2(xpos, ypos);
+		glm::mat4 proj = get_projection_matrix();
+		glm::mat4 view = camera.GetViewMatrix();
+		glm::vec4 viewport(0.0f, 0.0f, screen_width, screen_height);
 
-		glm::vec3 ray = glm::normalize(camera.Position - dir2);
+		glm::vec3 screen_near(xpos, screen_height - ypos, 0.0f);
+		glm::vec3 ray_near = glm::unProject(screen_near, view, proj, viewport);
 
-		float dY = camera.Position.y;
-		float count = dY / ray.y;
+		glm::vec3 screen_far(xpos, screen_height - ypos, 1.0f);
+		glm::vec3 ray_far = glm::unProject(screen_far, view, proj, viewport);
+
+		glm::vec3 ray = glm::normalize(ray_near - ray_far);
+
+
+		//	std::cout << ray.x << " " << ray.y << " " << ray.z << std::endl;
+
+	//	std::cout << test_object_1->get_angle().y << std::endl;
+
+
+		float x = ray.x;
+		float y = ray.y;
+		float z = ray.z;
+
+		float t = std::atan(z / x);
+		float p = std::atan(y / z);
+
+
+
+		//	rot = glm::rotate(rot, test_object_1->get_angle().x, glm::vec3(1.0f, 0.0f, 0.0f));
+
+
+
+
+		float ay = glm::orientedAngle(glm::vec3(1.0f, 0.0f, 0.0f), ray, glm::vec3(0.0f, 1.0f, 0.0f));
+		float az = glm::orientedAngle(glm::vec3(1.0f, 0.0f, 0.0f), ray, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		std::cout << ay << " : " << az << std::endl;
+
+		glm::mat4 rot;
+		rot = glm::rotate(rot, ay, glm::vec3(0.0f, 1.0f, 0.0f));
+		rot = glm::rotate(rot, az, glm::vec3(0.0f, 0.0f, 1.0f));
+		glm::vec3 test_ray = glm::normalize(glm::vec3(rot * glm::vec4()));
+
+
+
+		test_object_5->set_angle(glm::vec3(0.0f, ay, -az));
+
+
+
+
+		//	test_object_4->set_position(test_position - test_ray);
+
+		float count = camera.Position.y / ray.y;
 		float dX = ray.x * count;
 		float dZ = ray.z * count;
 
-		glm::vec4 temp_ptr = glm::vec4(camera.Position.x + dX, 0.0f, camera.Position.z + dZ, 0.0f);
-
-	//	glm::mat4 rot;
-	//	rot = glm::rotate(rot, camera.Pitch, glm::vec3(1.0f, 0.0f, 0.0f));
-	//	rot = glm::rotate(rot, camera.Roll, glm::vec3(0.0f, 1.0f, 0.0f));
-	//	temp_ptr = rot * temp_ptr;
-
-		pointer_pos = glm::vec3(temp_ptr);
+		pointer_pos = glm::vec3(camera.Position.x - dX, 0.0f, camera.Position.z - dZ);
 
 
+		if (test_object_1->intersects(camera.Position, test_ray)) {
+			std::cout << "1" << std::endl;
+		}
 
-		std::cout << dir1.x << " : " << dir1.y << " : " << dir1.z << std::endl;
-		std::cout << dir2.x << " : " << dir2.y << " : " << dir2.z << std::endl;
-		std::cout << "=============" << std::endl;
-		std::cout <<ray.x << " : " << ray.y << " : " << ray.z << std::endl;
-		std::cout << "=================" << std::endl;
+		if (test_object_2->intersects(camera.Position, ray)) {
+			//	std::cout << "2" << std::endl;
+		}
 
 		return;
 	}
@@ -319,8 +371,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-	SCR_WIDTH = width;
-	SCR_HEIGHT = height;
+	screen_width = width;
+	screen_height = height;
 	glViewport(0, 0, width, height);
 }
 

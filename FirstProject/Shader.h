@@ -15,8 +15,8 @@ class Shader {
 public:
 	unsigned int ID;
 
-	Shader(std::string vertex, std::string fragment, std::string geometryPath = "") {
-
+	Shader(std::string vertex, std::string fragment, std::string geometryPath = "") {                 
+		     
 		std::string vertexCode;
 		std::string fragmentCode;
 		std::string geometryCode;
@@ -41,7 +41,6 @@ public:
 			vertexShader = compile_shader(vertexCode, GL_VERTEX_SHADER);
 			fragmentShader = compile_shader(fragmentCode, GL_FRAGMENT_SHADER);
 
-			unsigned int geometry;
 			if (geometryPath != "") {
 				geometryShader = compile_shader(geometryCode, GL_GEOMETRY_SHADER);
 			}

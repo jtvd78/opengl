@@ -1,10 +1,8 @@
 #include <cmath>
 #include <iostream>
-#include <algorithm> \\ min() max()
+#include <algorithm> 
 #include <glm/gtc/matrix_transform.hpp>
 #include "KnobMesh.h"
-
-//const float  PI_F = 3.14159265358979f;
 
 KnobMesh::KnobMesh(int rows, int cols, Texture texture) :  
 	Mesh(texture, 
@@ -148,21 +146,4 @@ float KnobMesh::get_radius_slope(float y) {
 
 float KnobMesh::get_z(float angle) {
 	return cosf(angle / 180.0f * PI_F);
-}
-
-Bounds get_bounds(float *vbo, int count) {
-	Bounds bounds;
-
-	for (int i = 0; i < count; i++) {
-		bounds.x_min = std::min(bounds.x_min, vbo[i * 8]);
-		bounds.x_max = std::max(bounds.x_max, vbo[i * 8]);
-	
-		bounds.y_min = std::min(bounds.y_min, vbo[i * 8 + 1]);
-		bounds.y_max = std::max(bounds.y_max, vbo[i * 8 + 1]);
-
-		bounds.z_min = std::min(bounds.z_min, vbo[i * 8 + 2]);
-		bounds.z_max = std::max(bounds.z_max, vbo[i * 8 + 2]);
-	}
-
-	return bounds;
 }
