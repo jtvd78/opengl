@@ -208,15 +208,15 @@ int main() {
 
 
 		// Draw objects
-	//	floor_object.draw(shader);
-	//	cube_object.draw(shader);
+		floor_object.draw(shader);
+		cube_object.draw(shader);
 		knob_object_1.draw(shader);
-		//		knob_object_2.draw(shader);
+		knob_object_2.draw(shader);
 
-		test_object_3->draw(shader);
-		test_object_4->draw(shader);
+		//	test_object_3->draw(shader);
+		//	test_object_4->draw(shader);
 
-		ray_object.draw(shader);
+		//ray_object.draw(shader);
 
 
 
